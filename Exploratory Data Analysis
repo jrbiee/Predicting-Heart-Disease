@@ -1,0 +1,88 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+
+def perform_eda(file):
+    '''This code is to being performing exploratory analysis of the data by:
+    1. Checking to ensure the file exists and then reading in the data from the file.
+    2. The rest of the function returns descriptive informatio about the data
+    3. '''
+    
+    if  not os.path.exists(file):
+        raise ValueError("The provided file does not exist")
+        
+    # Read in the data from the file
+    print(f'Does this file exist?: {os.path.isfile(file)}')
+    df= pd.read_csv(file)
+    
+    
+    #descriptive statistics
+    print("\nDescriptive Statistics: ")
+    
+    print(df.describe())
+    
+    head = df.head()
+    shape = df.shape
+    column = df.columns
+    info = df.info()
+    describe = df.describe()
+    unique = df.nunique(axis=0)
+    missing = df.isna().sum()
+    duplicates = df.duplicated().sum()
+    
+    print(f'Making sure the dataset looks good:\n {head}')
+    print(f'The shape of the dataset is: {shape}')
+    print(f'The columns of the dataset are listed as:\n {column}')
+    print(f'Information of the dataset is shown as:\n {info}')
+    print(f'The statistics of the data is shown as:\n {describe}')
+    print(f'The unique values are:\n {unique}')
+    print(f'Missing Values in each column:\n {missing}')
+    print(f'The number of duplicates found in this dataset is:\n {duplicates}')
+    
+   
+    return df
+
+file = r'your_filepath_here.csv'
+df = perform_eda(file)
+
+def preprocess_visuals(df):
+    '''Visualizing raw data based on correlation matrix, boxplot, 
+    and histograms'''
+    numerical_columns=['Age', 'RestingBP', 'Cholesterol','MaxHR', 'Oldpeak']
+
+    # Visualizations
+    print("\nVisualizations:")
+    # Creates a correlation matrix
+    plt.figure(figsize=(5,5))
+    sns.heatmap(df.corr(method='pearson'), annot=True)
+    plt.title('Data Correlation', weight='bold').set_fontsize('xx-large')
+    plt.show()
+
+# Creates a heatmap of missing values in the dataset 
+    plt.figure(figsize=(5,5))
+    sns.heatmap(df.isna().transpose())
+    plt.show()
+
+# Creates a boxplot for all numeric columns in the DataFrame
+    plt.figure(figsize=(5, 5))
+    sns.boxplot(data=df[numerical_columns], showfliers=True)
+    plt.title('Boxplot for Numeric Columns')
+    plt.show()
+
+# Creates histograms of 
+    sns.histplot(data=df['Age'],bins = 10)
+    plt.title('The Distribution of Age')
+    plt.show()
+    
+    sns.histplot(data=df['Cholesterol'],bins = 20)
+    plt.title('The Distribution of Cholesterol')
+    plt.show()      
+    
+    sns.histplot(data=df['MaxHR'],bins = 10)
+    plt.title('The Distribution of Maximum Heart Rate')
+    plt.show()     
+        
+
+preprocess_visuals(df) 
