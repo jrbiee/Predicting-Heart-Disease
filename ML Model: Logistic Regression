@@ -1,6 +1,4 @@
 from sklearn.linear_model import LogisticRegression
-
-from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, log_loss
 
 def log_regression(scaled_X_train, scaled_X_validate, scaled_X_test, y_train, y_validate, y_test):
