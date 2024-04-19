@@ -1,0 +1,13 @@
+def scaling(df, target):
+'''This function scales and transforms the data to get it ready for training by splitting it into a training, validation, and test set.''' 
+    X = df.drop('HeartDisease', axis=1)
+    y = df['HeartDisease']
+    X_train, X_test, y_train, y_test = train_test_split(X,y, test_size=0.2, random_state=20, stratify=y)
+    X_train, X_validate, y_train, y_validate = train_test_split(X_train, y_train, test_size=0.2, random_state=20, stratify=y_train)
+    
+    scaler = Normalizer()
+    scaled_X_train = scaler.fit_transform(X_train)
+    scaled_X_validate = scaler.transform(X_validate)
+    scaled_X_test = scaler.transform(X_test)
+    return scaled_X_train, scaled_X_validate, scaled_X_test, y_train, y_validate, y_test
+scaled_X_train, scaled_X_validate, scaled_X_test, y_train, y_validate, y_test = scaling(df, 'HeartDisease')
