@@ -1,0 +1,101 @@
+def preprocessing(df):
+    '''This function converts categorical columns into numerical'''
+    df['Cholesterol'].replace(0, np.nan, inplace=True)
+    df['Cholesterol'] = df['Cholesterol'].fillna(df['Cholesterol'].mean())
+    
+    #Categorical columns to Numeric
+    df['Sex'] = df['Sex'].replace({'M': 0, 'F': 1}) #changes into binary
+    df['ExerciseAngina'] = df['ExerciseAngina'].replace({'Y':1, 'N':0})
+    df['ChestPainType'] = df['ChestPainType'].replace({'ASY':0, 'NAP':1, 'TA':2, 'ATA':3})
+    df['RestingECG'] = df['RestingECG'].replace({'Normal':0, 'ST':1, 'LVH':2})
+    df['ST_Slope'] = df['ST_Slope'].replace({'Up':2, 'Flat':1, 'Down':0})
+    
+    return df
+
+def visuals(df):
+    '''This function returns visualzations of the data such as correlaton matrix, plots, 
+    histograms, etc.
+    '''
+    # Visualize correlation matrix
+    correlation = df.corr()
+    plt.figure(figsize=(10,8))
+    sns.heatmap(correlation, annot=True)
+    plt.title('Correlation of the Data', weight='bold').set_fontsize('xx-large')
+    plt.show()
+    
+    print("Correlation Matrix is: ")
+    print(correlation)
+    
+    sns.countplot(data=df, x='ChestPainType', hue='Sex')
+    plt.xlabel('Chest Pain Type')
+    plt.title('Chest Pain Type by Sex')
+    plt.show()
+    
+    sns.countplot(data=df, x='ExerciseAngina', hue='HeartDisease')
+    plt.xlabel('Exercise Angina')
+    plt.title('Exercise Angina by Heart Disease')
+    plt.show()
+    
+    sns.countplot(data=df, x='ChestPainType', hue='HeartDisease')
+    plt.xlabel('Chest Pain Types')
+    plt.title('Number of Chest Pain Type by Heart Disease')
+    plt.show()
+    
+    sns.countplot(data=df, x='ST_Slope', hue='HeartDisease')
+    plt.xlabel('ST Slope')
+    plt.title('ST Slope by Heart Disease')
+    plt.show()
+    # print(df.describe())
+    
+    # design_report = ProfileReport(df)
+    # design_report.to_file('pandas_profiling_report.html')
+    
+    #Pie Charts of the Data
+    count = df['Sex'].value_counts()
+    plt.pie(count, colors=('#0000FF', '#FFA500'), labels=('Males','Females'),  autopct='%1.1f%%')
+    plt.title('Percentage of Males and Females')
+    plt.show()
+    
+    #Boxplot of Processed Data
+    # sns.countplot(data=df, x='ChestPain')
+    # sns.title('Processed Data', weight='bold').set_fontsize('xx-large')
+    # plt.show()
+    
+    #Histograms After Processing
+    sns.histplot(data=df['Age'],bins = 10)
+    plt.title('The Distribution of Age')
+    plt.show()
+    
+    sns.histplot(data=df['Cholesterol'],bins = 20)
+    plt.title('The Distribution of Cholesterol')
+    plt.show()      
+    
+    sns.histplot(data=df['MaxHR'],bins = 10)
+    plt.title('The Distribution of Maximum Heart Rate')
+    plt.show()   
+    
+    sns.histplot(data=df['ExerciseAngina'],bins = 10)
+    plt.title('The Distribution of Exercise Angina')
+    plt.show()
+    
+    # Stacked Bar Chart
+    stacked_bar_data = df.groupby(['HeartDisease', 'ST_Slope']).size().unstack()
+    stacked_bar_data.plot(kind='bar', stacked=True)
+    plt.xlabel('Heart Disease')
+    plt.ylabel('Count')
+    plt.title('Distribution of ST Slope by Heart Disease')
+    plt.legend(title='ST Slope')
+    plt.show()
+
+    stacked_bar_data = df.groupby(['HeartDisease', 'ExerciseAngina']).size().unstack()
+    stacked_bar_data.plot(kind='bar', stacked=True)
+    plt.xlabel('Exercise Angina')
+    plt.ylabel('Count')
+    plt.title('Distribution of Exercise Angina by Heart Disease')
+    plt.legend(title='Heart Disease',)
+    plt.show()
+    
+
+file = r'C:\Users\jacqu\Desktop\DU Class Folders\Deep Learning\heart_data.csv'
+preprocess = preprocessing(df)
+visuals(preprocess)
