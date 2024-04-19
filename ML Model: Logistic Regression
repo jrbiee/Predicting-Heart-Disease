@@ -1,0 +1,62 @@
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, log_loss
+
+def log_regression(scaled_X_train, scaled_X_validate, scaled_X_test, y_train, y_validate, y_test):
+    '''Logistic Regression is used to output:
+    1. The loss_value
+    2. F1 Score
+    3. Precision
+    4. Recall'''
+    logistic_regression = LogisticRegression()
+    logistic_regression.fit(scaled_X_train, y_train)
+    
+    # Predictions on the validation set
+    y_predict_val = logistic_regression.predict(scaled_X_validate)
+    
+    # Compute metrics on the validation set
+    val_accuracy = accuracy_score(y_validate, y_predict_val)
+    val_f1 = f1_score(y_validate, y_predict_val)
+    val_precision = precision_score(y_validate, y_predict_val)
+    val_recall = recall_score(y_validate, y_predict_val)
+    
+    # Predictions on the test set
+    y_predict_test = logistic_regression.predict(scaled_X_test)
+    
+    # Compute metrics on the test set
+    test_accuracy = accuracy_score(y_test, y_predict_test)
+    test_f1 = f1_score(y_test, y_predict_test)
+    test_precision = precision_score(y_test, y_predict_test)
+    test_recall = recall_score(y_test, y_predict_test)
+    test_log_loss = log_loss(y_test, y_predict_test)
+    
+    results = {
+        'val_accuracy': val_accuracy,
+        'val_f1_score': val_f1,
+        'val_precision': val_precision,
+        'val_recall': val_recall,
+        'test_accuracy': test_accuracy,
+        'test_f1_score': test_f1,
+        'test_precision': test_precision,
+        'test_recall': test_recall,
+        'test_log_loss': test_log_loss
+    }
+    
+    print("Validation:")
+    print(f'Accuracy: {val_accuracy}')
+    print(f'F1 Score: {val_f1}')
+    print(f'Precision: {val_precision}')
+    print(f'Recall: {val_recall}')
+    
+    print("\nTest Set:")
+    print(f'Accuracy: {test_accuracy}')
+    print(f'F1 Score: {test_f1}')
+    print(f'Precision: {test_precision}')
+    print(f'Recall: {test_recall}')
+    print(f'Log Loss: {test_log_loss}')
+    
+    return results
+
+log_results = log_regression(scaled_X_train, scaled_X_validate, scaled_X_test, y_train, y_validate, y_test)
+print(log_results)
