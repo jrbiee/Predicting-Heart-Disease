@@ -1,0 +1,20 @@
+def torch_conversion(scaled_X_train, scaled_X_test, y_train, y_test):
+    '''This function converts the scaled data into tensors to be used by the neural 
+    network.'''
+    scaled_X_train = torch.tensor(scaled_X_train, dtype=torch.float32)
+    y_train = torch.tensor(y_train.values, dtype=torch.float32).reshape(-1, 1)
+    scaled_X_test = torch.tensor(scaled_X_test, dtype=torch.float32)
+    y_test = torch.tensor(y_test.values, dtype=torch.float32).reshape(-1, 1)
+    xtrain_shape = scaled_X_train.shape
+    ytrain_shape = y_train.shape
+    xtest_shape = scaled_X_test.shape
+    ytest_shape = y_test.shape
+    print(xtrain_shape)
+    print(ytrain_shape)
+    print(xtest_shape)
+    print(ytest_shape)
+    print(type(scaled_X_train))
+    print(type(y_train))
+    print(type(scaled_X_test))
+    print(type(y_test))
+    return scaled_X_train, scaled_X_test, y_train, y_test
