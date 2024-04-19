@@ -1,0 +1,23 @@
+def feature_selection(df):
+
+    X = df.drop('HeartDisease', axis=1)
+    y = df['HeartDisease']
+
+    bestfeatures = SelectKBest(score_func=f_regression, k=10)
+    fit = bestfeatures.fit(X, y)
+    
+    dfscores = pd.DataFrame(fit.scores_, columns=['Scores'])
+    dfcolumns = pd.DataFrame(X.columns, columns=['Variable'])
+
+    features_scores = pd.concat([dfcolumns, dfscores], axis=1)
+    features_scores = features_scores.nlargest(10, 'Scores')
+    
+    selected_features = features_scores['Variable'].tolist()
+    selected_features.append('HeartDisease')
+    relevant_df = df[selected_features]
+    
+    print(features_scores)
+    
+    return relevant_df
+relevant_features = feature_selection(df)
+print(relevant_features)
