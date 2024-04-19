@@ -1,0 +1,53 @@
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+
+def dec_tree(scaled_X_train, scaled_X_validate, scaled_X_test, y_train, y_validate, y_test):
+    # Create and train the decision tree model using the training data
+    decision_tree = DecisionTreeClassifier(random_state=20)
+    decision_tree.fit(scaled_X_train, y_train)
+    
+    # Predictions on the validation set
+    y_predict_val = decision_tree.predict(scaled_X_validate)
+    
+    # Compute metrics on the validation set
+    val_accuracy = accuracy_score(y_validate, y_predict_val)
+    val_f1 = f1_score(y_validate, y_predict_val)
+    val_precision = precision_score(y_validate, y_predict_val)
+    val_recall = recall_score(y_validate, y_predict_val)
+    
+    # Predictions on the test set
+    y_predict_test = decision_tree.predict(scaled_X_test)
+    
+    # Compute metrics on the test set
+    test_accuracy = accuracy_score(y_test, y_predict_test)
+    test_f1 = f1_score(y_test, y_predict_test)
+    test_precision = precision_score(y_test, y_predict_test)
+    test_recall = recall_score(y_test, y_predict_test)
+    
+    results = {
+        'val_accuracy': val_accuracy,
+        'val_f1_score': val_f1,
+        'val_precision': val_precision,
+        'val_recall': val_recall,
+        'test_accuracy': test_accuracy,
+        'test_f1_score': test_f1,
+        'test_precision': test_precision,
+        'test_recall': test_recall
+    }
+    
+    print("Validation:")
+    print(f'Accuracy: {val_accuracy}')
+    print(f'F1 Score: {val_f1}')
+    print(f'Precision: {val_precision}')
+    print(f'Recall: {val_recall}')
+    
+    print("\nTest Set:")
+    print(f'Accuracy: {test_accuracy}')
+    print(f'F1 Score: {test_f1}')
+    print(f'Precision: {test_precision}')
+    print(f'Recall: {test_recall}')
+    
+    return results
+
+tree_results = dec_tree(scaled_X_train, scaled_X_validate, scaled_X_test, y_train, y_validate, y_test)
+print(tree_results)
